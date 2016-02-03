@@ -62,13 +62,17 @@ init([]) ->
   logger:start(),
   log4erl:info("start root supervisor..."),
 
-%%  log4erl:info("start sasl..."),
-%%  application:start(sasl),
-%%  log4erl:info("start sasl ok"),
+  log4erl:info("start sasl..."),
+  application:start(sasl),
+  log4erl:info("start sasl ok"),
 
   log4erl:info("start os_mon..."),
   application:start(os_mon),
   log4erl:info("start os_mon ok"),
+
+  log4erl:info("start recon..."),
+  application:start(recon),
+  log4erl:info("start recon ok"),
 
   ErlSvrCs = {
     erlS_svr_sup,
@@ -81,7 +85,7 @@ init([]) ->
 
   VmMemMonitor = {
     vm_memory_monitor,
-    {vm_memory_monitor, start_link,[2048]},
+    {vm_memory_monitor, start_link,[1]},
     permanent,
     infinity,
     worker,
