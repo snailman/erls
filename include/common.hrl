@@ -39,3 +39,11 @@
 -define(OFFLINE_REASON_SOCK_LOGOUT, 3).
 -define(OFFLINE_REASON_SOCK_KICK, 4).
 -define(OFFLINE_REASON_EXCEPTION, 4).
+
+
+%% 时间类型：秒
+-define(COMMON_TIME_NOW_SEC, 1).
+% milliseconds
+-define(COMMON_TIME_NOW_MS_SEC, 2).
+
+

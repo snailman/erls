@@ -74,6 +74,10 @@ init([]) ->
   application:start(recon),
   log4erl:info("start recon ok"),
 
+  log4erl:info("check all process..."),
+  logger:debug("~p", [[recon:info(PID) || PID <- erlang:processes()]]),
+  log4erl:info("check all process ok"),
+
   ErlSvrCs = {
     erlS_svr_sup,
      {erlS_svr_sup, start_link, [{10,15001}]},
@@ -92,10 +96,19 @@ init([]) ->
     [erlS_svr_sup]
   },
 
+  TimeServer = {
+    common_time_server,
+    {common_time_server, start_link,[1]},
+    permanent,
+    infinity,
+    worker,
+    [common_time_server]
+  },
+
   {ok,
     {
       {one_for_one, 1, 10},
-     [ErlSvrCs,VmMemMonitor]
+     [ErlSvrCs,VmMemMonitor,TimeServer]
     }
   }.
 

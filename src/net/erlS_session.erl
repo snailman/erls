@@ -230,15 +230,15 @@ doMsgL(Data) ->
               end,
 
   %%处理
-  case readPacketL(Data) of
+  case readPacketL(NewMsgBin) of
     {ok, Param} ->
       case Param of
-        {wait_for_more_data, NewMsgBin} ->
-          set_half_msg(NewMsgBin);
+        {wait_for_more_data, HalfBin} ->
+          set_half_msg(HalfBin);
         {full_packet, Cmd, Bin} ->
           case net_user:flowControl() of
             true ->
-              {Pk, LeftBin} = readMsgL(Cmd, Bin),
+              {Pk, LeftBin} = readPacket(Cmd, Bin),
               net_user:onMsg(Cmd, Pk),
               doMsgL(LeftBin);
             false ->
@@ -275,7 +275,7 @@ readPacketL(Data) ->
       {error,{full_length_out_of_range, TotalSize}}
   end.
 
-readMsgL(Cmd, Bin)->
+readPacket(Cmd, Bin)->
   {Cmd, Bin}.
 
 
