@@ -57,7 +57,7 @@ time_offset/0,
 -define(GREGORIAN_TIME_1970,calendar:datetime_to_gregorian_seconds({{1970,1,1}, {8,0,0}})).
 
 time_offset() ->
-	0.
+	[0].
 
 %%@doc 增加日期
 add_days(TheDate,Diff) when is_integer(Diff) andalso is_tuple(TheDate) ->

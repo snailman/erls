@@ -59,24 +59,15 @@ start_link() ->
   {error, Reason :: term()}).
 init([]) ->
 
-  logger:start(),
-  log4erl:info("start root supervisor..."),
+  init_base(),
 
-  log4erl:info("start sasl..."),
-  application:start(sasl),
-  log4erl:info("start sasl ok"),
 
-  log4erl:info("start os_mon..."),
-  application:start(os_mon),
-  log4erl:info("start os_mon ok"),
-
-  log4erl:info("start recon..."),
-  application:start(recon),
-  log4erl:info("start recon ok"),
-
-  log4erl:info("check all process..."),
-  logger:debug("~p", [[recon:info(PID) || PID <- erlang:processes()]]),
-  log4erl:info("check all process ok"),
+  TimeServer = {
+    common_time_server,
+    {common_time_server, start_link, []},
+    transient, brutal_kill, worker,
+    [common_time_server]
+  },
 
   ErlSvrCs = {
     erlS_svr_sup,
@@ -96,22 +87,37 @@ init([]) ->
     [erlS_svr_sup]
   },
 
-  TimeServer = {
-    common_time_server,
-    {common_time_server, start_link,[1]},
-    permanent,
-    infinity,
-    worker,
-    [common_time_server]
-  },
-
   {ok,
     {
       {one_for_one, 1, 10},
-     [ErlSvrCs,VmMemMonitor,TimeServer]
+     [TimeServer, ErlSvrCs,VmMemMonitor]
     }
   }.
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+init_base( ) ->
+  logger:start(),
+  log4erl:info("start root supervisor..."),
+
+  log4erl:info("start sasl..."),
+  application:start(sasl),
+  log4erl:info("start sasl ok"),
+
+  log4erl:info("start os_mon..."),
+  application:start(os_mon),
+  log4erl:info("start os_mon ok"),
+
+  log4erl:info("start recon..."),
+  application:start(recon),
+  log4erl:info("start recon ok"),
+
+%%  log4erl:info("start common_time_server..."),
+%%  common_time_server:start(self()),
+%%  log4erl:info("start common_time_server ok"),
+
+%%  log4erl:info("check all process..."),
+%%  logger:debug("~p", [[recon:info(PID) || PID <- erlang:processes()]]),
+%%  log4erl:info("check all process ok").
+  ok.
