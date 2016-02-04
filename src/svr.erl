@@ -27,17 +27,16 @@ start() ->
 %% 关闭应用
 stop() ->
   try
-    logger:info("svr:stop.....")
+    logger:info("svr:stop....."),
+    timer:sleep(20000),     %%等待2000毫秒
+    case application:stop(erlS) of
+      ok ->
+        logger:info("svr stopped");
+      Msg ->
+        logger:error("svr stop not ok,msg=~p",[Msg])
+    end
   catch
     _:_Why ->
       logger:error("svr:stop exception, reason=~p,bt=~p",[_Why, erlang:get_stacktrace()])
-  end,
-
-  timer:sleep(20000),     %%等待2000毫秒
-  case application:stop(erlS) of
-    ok ->
-      logger:info("svr stopped");
-    Msg ->
-      logger:error("svr stop not ok,msg=~p",[Msg])
   end,
   erlang:halt().
