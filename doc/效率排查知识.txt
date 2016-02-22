@@ -1,0 +1,253 @@
++ erlang从R15以后提供了调度器的利用率调查，这个函数就是：erlang:statistics(scheduler_wall_time)
+具体参考文档关于erlang:statistics(scheduler_wall_time)
+
+其中要注意的是”scheduler_wall_time is by default disabled. 
+Use erlang:system_flag(scheduler_wall_time, true) to enable it.”。原因是运行期需要去做统计工作会影响性能。而且函数返回的每个调度器的使用情况顺序是乱的，需要排序下。
+percept2提供了个percept2_sampling来帮我们可视化这个利用率, 演示如下：
+
+我们启动percept2_sampling收集系统一分钟的数据，然后用web界面查看：
+$ erl -pa percept2/ebin
+Erlang R15B03 (erts-5.9.3.1) 1 [64-bit] [smp:16:16] [async-threads:0] [hipe] [kernel-poll:false]
+ 
+Eshell V5.9.3.1  (abort with ^G)
+1> percept2:start_webserver(8933).
+{started,"rds064076",8933}
+2> percept2_sampling:start([all], 60000, ".").
+<0.57.0>
+
+
++http://www.cnblogs.com/lulu/p/3978378.html
+
+通过微博私信，请教了下郑思瑶，推荐VTune分析，推测是大量进程时调度器消耗过大。
+通过Intel 官方网站，填写注册信息，会立即回复邮件下载地址，并给30天试用期。
+速度很慢，建议挂着VPN下载；VTune 的linux版本命令行模式使用很简单：
+
+tar -zxf vtune_amplifier_xe_2015.tar.gz
+
+cd vtune_amplifier_xe_2015
+
+./install.sh
+
+cd /opt/intel/vtune_amplifier_xe_2015.1.0.367959/
+
+source amplxe-vars.sh
+
+amplxe-cl -collect lightweight-hotspots -run-pass-thru=--no-altstack -target-pid=1575
+
+amplxe-cl -report hotspots
+
+
+ 可直接线上执行，不影响服务正常运行，得到如下结果：
+
+复制代码
+Summary
+-------
+Elapsed Time:       19.345
+CPU Time:           182.023
+Average CPU Usage:  9.155
+CPI Rate:           1.501
+
+Function                                     Module              CPU Time:Self
+-------------------------------------------  ------------------  -------------
+sched_spin_wait                              beam.smp                   72.754
+raw_local_irq_enable                         vmlinux                    19.282
+process_main                                 beam.smp                   10.476
+ethr_native_atomic32_read                    beam.smp                    8.337
+func@0xffffffff8100af60                      vmlinux                     3.007
+__pthread_mutex_lock                         libpthread-2.12.so          2.342
+raw_local_irq_restore                        vmlinux                     1.973
+__sched_yield                                libc-2.12.so                1.913
+pthread_mutex_unlock                         libpthread-2.12.so          1.553
+__audit_syscall_exit                         vmlinux                     1.192
+system_call                                  vmlinux                     1.156
+erts_thr_yield                               beam.smp                    1.114
+handle_delayed_dealloc                       beam.smp                    0.977
+update                                       beam.smp                    0.828
+raw_local_irq_enable                         vmlinux                     0.780
+
+
+
++++++++++++++++++++
+ 系统级别perf top, dstat -tam, vtune 都能很好分析beam 瓶颈，本文主要erlang 级别排查：
+
+1. 反编译
+
+   确认线上运行代码是否正确，reltools没掌握好，升级偶尔出现问题
+
+decompile(Mod) ->
+    {ok,{_,[{abstract_code,{_,AC}}]}} = beam_lib:chunks(code:which(Mod), [abstract_code]),
+    io:format("~s~n", [erl_prettypr:format(erl_syntax:form_list(AC))]).
+ 
+
+2. 进程栈
+
+    类似于jstack，发现大量进程挂起，进程数过高，运行慢，hang住等问题用到
+
+复制代码
+pstack(Reg) when is_atom(Reg) ->
+    case whereis(Reg) of
+        undefined -> undefined;
+        Pid -> pstack(Pid)
+    end;
+pstack(Pid) ->
+    io:format("~s~n", [element(2, process_info(Pid, backtrace))]).
+复制代码
+ 
+
+3. etop
+
+  分析内存、cpu占用进程，即使数十w进程node 也能正常使用
+
+复制代码
+%进程CPU占用排名
+etop() ->
+    spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, reductions}]) end).
+
+%进程Mem占用排名
+etop_mem() ->
+    spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, memory}]) end).
+
+%停止etop
+etop_stop() ->
+    etop:stop().
+复制代码
+ 
+
+4. gc all
+
+   进程内存过高时，来一发，看看是内存泄露还是gc不过来
+
+% 对所有process做gc
+gc_all() ->
+    [erlang:garbage_collect(Pid) || Pid <- processes()].
+ 
+
+5.  fprof
+
+复制代码
+% 对MFA 执行分析，会严重减缓运行，建议只对小量业务执行
+% 结果:
+% fprof 结果比较详细，能够输出热点调用路径
+fprof(M, F, A) ->
+    fprof:start(),
+    fprof:apply(M, F, A),
+    fprof:profile(),
+    fprof:analyse(),
+    fprof:stop().
+复制代码
+ 
+
+6. eprof
+
+复制代码
+% 对整个节点内所有进程执行eprof, eprof 对线上业务有一定影响,慎用!
+% 建议TimeoutSec<10s，且进程数< 1000，否则可能导致节点crash
+% 结果:
+% 输出每个方法实际执行时间（不会累计方法内其他mod调用执行时间）
+% 只能得到mod - Fun 执行次数 执行耗时
+eprof_all(TimeoutSec) ->
+    eprof(processes() -- [whereis(eprof)], TimeoutSec).
+
+eprof(Pids, TimeoutSec) ->
+    eprof:start(),
+    eprof:start_profiling(Pids),
+    timer:sleep(TimeoutSec),
+    eprof:stop_profiling(),
+    eprof:analyze(total),
+    eprof:stop().
+复制代码
+ 
+
+7. scheduler usage
+
+复制代码
+% 统计下1s每个调度器CPU的实际利用率(因为有spin wait、调度工作, 可能usage 比top显示低很多)
+scheduler_usage() ->
+    scheduler_usage(1000).
+
+scheduler_usage(RunMs) ->
+    erlang:system_flag(scheduler_wall_time, true),
+    Ts0 = lists:sort(erlang:statistics(scheduler_wall_time)),
+    timer:sleep(RunMs),
+    Ts1 = lists:sort(erlang:statistics(scheduler_wall_time)),
+    erlang:system_flag(scheduler_wall_time, false),
+    Cores = lists:map(fun({{I, A0, T0}, {I, A1, T1}}) ->
+                    {I, (A1 - A0) / (T1 - T0)} end, lists:zip(Ts0, Ts1)),
+    {A, T} = lists:foldl(fun({{_, A0, T0}, {_, A1, T1}}, {Ai,Ti}) ->
+                    {Ai + (A1 - A0), Ti + (T1 - T0)} end, {0, 0}, lists:zip(Ts0, Ts1)),
+    Total = A/T,
+    io:format("~p~n", [[{total, Total} | Cores]]).
+复制代码
+ 
+
+8.  进程调度
+
+复制代码
+% 统计下1s内调度进程数量(含义：第一个数字执行进程数量，第二个数字迁移进程数量)
+scheduler_stat() ->
+    scheduler_stat(1000).
+
+scheduler_stat(RunMs) ->
+    erlang:system_flag(scheduling_statistics, enable),
+    Ts0 = erlang:system_info(total_scheduling_statistics),
+    timer:sleep(RunMs),
+    Ts1 = erlang:system_info(total_scheduling_statistics),
+    erlang:system_flag(scheduling_statistics, disable),
+    lists:map(fun({{Key, In0, Out0}, {Key, In1, Out1}}) ->
+                {Key, In1 - In0, Out1 - Out0} end, lists:zip(Ts0, Ts1)).
+复制代码
+ 
+
+9. trace 日志
+
+　　会把mod 每次调用详细MFA log 下来，args 太大就不好看了
+
+复制代码
+%trace Mod 所有方法的调用
+trace(Mod) ->
+    dbg:tracer(),
+    dbg:tpl(Mod, '_', []),
+    dbg:p(all, c).
+
+%trace Node上指定 Mod 所有方法的调用, 结果将输出到本地shell
+trace(Node, Mod) ->
+    dbg:tracer(),
+    dbg:n(Node),
+    dbg:tpl(Mod, '_', []),
+    dbg:p(all, c).
+
+%停止trace
+trace_stop() ->
+    dbg:stop_clear().
+复制代码
+ 
+
+10. 内存高OOM 排查工具
+
+  etop 无法应对10w+ 进程节点, 下面代码就没问题了；找到可疑proc后通过pstack、message_queu_len 排查原因
+
+复制代码
+  proc_mem_all(SizeLimitKb) ->
+      Procs = [{undefined, Pid} || Pid<- erlang:processes()],
+      proc_mem(Procs, SizeLimitKb).
+
+  proc_mem(SizeLimitKb) ->
+      Procs = [{Name, Pid} || {_, Name, Pid, _} <- release_handler_1:get_supervised_procs(),
+                              is_process_alive(Pid)],
+      proc_mem(Procs, SizeLimitKb).
+
+  proc_mem(Procs, SizeLimitKb) ->
+      SizeLimit = SizeLimitKb * 1024,
+      {R, Total} = lists:foldl(fun({Name, Pid}, {Acc, TotalSize}) ->
+          case erlang:process_info(Pid, total_heap_size) of
+              {_, Size0} ->
+                  Size = Size0*8,
+                  case Size > SizeLimit of
+                      true -> {[{Name, Pid, Size} | Acc], TotalSize+Size};
+                      false -> {Acc, TotalSize}
+                  end;
+              _ -> {Acc, TotalSize}
+              end
+          end, {[], 0}, Procs),
+      R1 = lists:keysort(3, R),
+      {Total, lists:reverse(R1)}.

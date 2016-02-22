@@ -1,0 +1,16 @@
+++++++++++++++++++
+内存
+
+1. 查看节点的内存瓶颈所在地方 erlang:memory(). / io:format("~s~n", [binary_to_list(erlang:system_info(info))]).
+2. 查看占用内存最高的进程 spawn(fun()-> etop:start([{output, text}, {interval, 1}, {lines, 20}, {sort, memory}]) end).
+3. 查看占用内存最高的进程状态 erlang:process_info(pid(0,12571,0)). 
+
+或者 etop
+
+
+CPU
+** dstat -tam, vtune 都能很好分析beam 瓶颈
+1.erlang:statistics(scheduler_wall_time) 或者VTune分析/etop
+2.%进程CPU占用排名
+etop() ->
+    spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, reductions}]) end).
