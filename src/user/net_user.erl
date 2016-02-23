@@ -8,13 +8,13 @@
 %%%-------------------------------------------------------------------
 -module(net_user).
 -author("Administrator").
--export([onMsg/2,flowControl/0]).
+-export([onMsg/2 , flowControl/0]).
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-onMsg(CMD, Pk) ->
-  logger:debug("recv(~p,~p)",[CMD, Pk]),
+onMsg(CMD , Pk) ->
+  logger:debug("recv(~p,~p)" , [CMD , Pk]) ,
   ok.
 
 

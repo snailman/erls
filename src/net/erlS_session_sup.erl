@@ -12,12 +12,12 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0, start_child/1]).
+-export([start_link/0 , start_child/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
 %%%===================================================================
 %%% API functions
@@ -30,12 +30,12 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , []).
 
 start_child(Param) ->
-  supervisor:start_child(?SERVER,Param).
+  supervisor:start_child(?SERVER , Param).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -52,27 +52,27 @@ start_child(Param) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, {SupFlags :: {RestartStrategy :: supervisor:strategy(),
-    MaxR :: non_neg_integer(), MaxT :: non_neg_integer()},
-    [ChildSpec :: supervisor:child_spec()]
+  {ok , {SupFlags :: {RestartStrategy :: supervisor:strategy() ,
+                      MaxR :: non_neg_integer() , MaxT :: non_neg_integer()} ,
+         [ChildSpec :: supervisor:child_spec()]
   }} |
   ignore |
-  {error, Reason :: term()}).
+  {error , Reason :: term()}).
 init([]) ->
   Session = {
-    erlS_session,
-    {erlS_session, start_link, []},
-    temporary,
-    5000,
-    worker,
+    erlS_session ,
+    {erlS_session , start_link , []} ,
+    temporary ,
+    5000 ,
+    worker ,
     [erlS_session]
-  },
+  } ,
 
-  {ok,
-    {
-      {simple_one_for_one, 10, 10},
-      [Session]
-    }
+  {ok ,
+   {
+     {simple_one_for_one , 10 , 10} ,
+     [Session]
+   }
   }.
 
 %%%===================================================================

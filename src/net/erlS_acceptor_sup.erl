@@ -12,12 +12,12 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0, start_child/1]).
+-export([start_link/0 , start_child/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
 -include("common.hrl").
 
@@ -32,13 +32,13 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , []).
 
 
 start_child(Param) ->
-  supervisor:start_child(?SERVER,Param).
+  supervisor:start_child(?SERVER , Param).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -55,25 +55,25 @@ start_child(Param) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, {SupFlags :: {RestartStrategy :: supervisor:strategy(),
-    MaxR :: non_neg_integer(), MaxT :: non_neg_integer()},
-    [ChildSpec :: supervisor:child_spec()]
+  {ok , {SupFlags :: {RestartStrategy :: supervisor:strategy() ,
+                      MaxR :: non_neg_integer() , MaxT :: non_neg_integer()} ,
+         [ChildSpec :: supervisor:child_spec()]
   }} |
   ignore |
-  {error, Reason :: term()}).
+  {error , Reason :: term()}).
 init([]) ->
   Acceptor = {
-    erlS_acceptor,
-    {erlS_acceptor, start_link, []},
+    erlS_acceptor ,
+    {erlS_acceptor , start_link , []} ,
     % temporary, brutal_kill,worker,[erlS_acceptor]
-    temporary, brutal_kill, worker, [erlS_acceptor]
-  },
+    temporary , brutal_kill , worker , [erlS_acceptor]
+  } ,
 
-  {ok,
-    {
-      {simple_one_for_one, 10, 10},
-      [Acceptor]
-    }
+  {ok ,
+   {
+     {simple_one_for_one , 10 , 10} ,
+     [Acceptor]
+   }
   }.
 
 %%%===================================================================

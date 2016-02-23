@@ -12,12 +12,12 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0,start_link/1,start_link/2]).
+-export([start_link/0 , start_link/1 , start_link/2]).
 
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
 %%%===================================================================
 %%% API functions
@@ -30,16 +30,16 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , []).
 
 start_link(Param) ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, Param).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , Param).
 
 
-start_link(Name, Param) ->
-  supervisor:start_link({local, Name}, ?MODULE, Param).
+start_link(Name , Param) ->
+  supervisor:start_link({local , Name} , ?MODULE , Param).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -56,40 +56,40 @@ start_link(Name, Param) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, {SupFlags :: {RestartStrategy :: supervisor:strategy(),
-    MaxR :: non_neg_integer(), MaxT :: non_neg_integer()},
-    [ChildSpec :: supervisor:child_spec()]
+  {ok , {SupFlags :: {RestartStrategy :: supervisor:strategy() ,
+                      MaxR :: non_neg_integer() , MaxT :: non_neg_integer()} ,
+         [ChildSpec :: supervisor:child_spec()]
   }} |
   ignore |
-  {error, Reason :: term()}).
+  {error , Reason :: term()}).
 init(Param) ->
-  logger:info("start erlS_sup(~p)...", [Param]),
+  logger:info("start erlS_sup(~p)..." , [Param]) ,
 
   ListenerSup = {
-    erlS_listener_sup,
-    {erlS_listener_sup, start_link, [Param]},
-    permanent,
-    infinity,
-    supervisor,
+    erlS_listener_sup ,
+    {erlS_listener_sup , start_link , [Param]} ,
+    permanent ,
+    infinity ,
+    supervisor ,
     [erlS_listener_sup]
-  },
+  } ,
 
 
   SessionSup = {
-    erlS_session_sup,
-    {erlS_session_sup, start_link, []},
-    permanent,
-    infinity,
-    supervisor,
+    erlS_session_sup ,
+    {erlS_session_sup , start_link , []} ,
+    permanent ,
+    infinity ,
+    supervisor ,
     [erlS_session_sup]
-  },
+  } ,
 
 
-  {ok,
-    {
-      {one_for_one, 1, 10},
-      [ListenerSup, SessionSup]
-    }
+  {ok ,
+   {
+     {one_for_one , 1 , 10} ,
+     [ListenerSup , SessionSup]
+   }
   }.
 
 %%%===================================================================

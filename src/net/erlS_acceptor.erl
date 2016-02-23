@@ -12,19 +12,19 @@
 -behaviour(gen_server).
 -include("common.hrl").
 %% API
--export([start_link/0,start_link/1]).
+-export([start_link/0 , start_link/1]).
 
 %% gen_server callbacks
--export([init/1,
-  handle_call/3,
-  handle_cast/2,
-  handle_info/2,
-  terminate/2,
-  code_change/3]).
+-export([init/1 ,
+         handle_call/3 ,
+         handle_cast/2 ,
+         handle_info/2 ,
+         terminate/2 ,
+         code_change/3]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
--record(state, {listen_socket, ref}).
+-record(state , {listen_socket , ref}).
 
 %%%===================================================================
 %%% API
@@ -37,13 +37,13 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  gen_server:start_link(?MODULE, ?MODULE, [], []).
+  gen_server:start_link(?MODULE , ?MODULE , [] , []).
 
 
 start_link(LSock) ->
-  gen_server:start_link(?MODULE, LSock, []).
+  gen_server:start_link(?MODULE , LSock , []).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -61,12 +61,12 @@ start_link(LSock) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term()} | ignore).
+  {ok , State :: #state{}} | {ok , State :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term()} | ignore).
 init(LSock) ->
-  erlang:process_flag(trap_exit, true),
-  logger:info("acceptor start ~p, sock=~p", [self(), LSock]),
-  {ok, #state{listen_socket=LSock}}.
+  erlang:process_flag(trap_exit , true) ,
+  logger:info("acceptor start ~p, sock=~p" , [self() , LSock]) ,
+  {ok , #state{listen_socket = LSock}}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -75,16 +75,16 @@ init(LSock) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_call(Request :: term(), From :: {pid(), Tag :: term()},
-    State :: #state{}) ->
-  {reply, Reply :: term(), NewState :: #state{}} |
-  {reply, Reply :: term(), NewState :: #state{}, timeout() | hibernate} |
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
-  {stop, Reason :: term(), NewState :: #state{}}).
-handle_call(_Request, _From, State) ->
-  {reply, ok, State}.
+-spec(handle_call(Request :: term() , From :: {pid() , Tag :: term()} ,
+                  State :: #state{}) ->
+                   {reply , Reply :: term() , NewState :: #state{}} |
+                   {reply , Reply :: term() , NewState :: #state{} , timeout() | hibernate} |
+                   {noreply , NewState :: #state{}} |
+                   {noreply , NewState :: #state{} , timeout() | hibernate} |
+                   {stop , Reason :: term() , Reply :: term() , NewState :: #state{}} |
+                   {stop , Reason :: term() , NewState :: #state{}}).
+handle_call(_Request , _From , State) ->
+  {reply , ok , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -93,12 +93,12 @@ handle_call(_Request, _From, State) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_cast(Request :: term(), State :: #state{}) ->
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), NewState :: #state{}}).
-handle_cast(_Request, State) ->
-  {noreply, State}.
+-spec(handle_cast(Request :: term() , State :: #state{}) ->
+  {noreply , NewState :: #state{}} |
+  {noreply , NewState :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term() , NewState :: #state{}}).
+handle_cast(_Request , State) ->
+  {noreply , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -110,34 +110,34 @@ handle_cast(_Request, State) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_info(Info :: timeout() | term(), State :: #state{}) ->
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), NewState :: #state{}}).
+-spec(handle_info(Info :: timeout() | term() , State :: #state{}) ->
+  {noreply , NewState :: #state{}} |
+  {noreply , NewState :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term() , NewState :: #state{}}).
 
 
-handle_info({inet_async, LSock, Ref, {ok, Sock}},
-            State = #state{listen_socket=LSock, ref=Ref}) ->
+handle_info({inet_async , LSock , Ref , {ok , Sock}} ,
+            State = #state{listen_socket = LSock , ref = Ref}) ->
 
-    accept_one(LSock, Sock),
+  accept_one(LSock , Sock) ,
 
-    %% accept more
-    accept(State);
+  %% accept more
+  accept(State);
 
-handle_info({inet_async, LSock, Ref, {error, Reason}},
-            State=#state{listen_socket=LSock, ref=Ref}) ->
-  logger:error("acceptor error reason=~p", [Reason]),
-    case Reason of
-        closed       -> {stop, normal, State}; %% listening socket closed
-        econnaborted -> accept(State); %% client sent RST before we accepted
-        _            -> {stop, {accept_failed, Reason}, State}
-    end;
-handle_info({start_accept_now}, State) ->
-     accept(State);
+handle_info({inet_async , LSock , Ref , {error , Reason}} ,
+            State = #state{listen_socket = LSock , ref = Ref}) ->
+  logger:error("acceptor error reason=~p" , [Reason]) ,
+  case Reason of
+    closed -> {stop , normal , State}; %% listening socket closed
+    econnaborted -> accept(State); %% client sent RST before we accepted
+    _ -> {stop , {accept_failed , Reason} , State}
+  end;
+handle_info({start_accept_now} , State) ->
+  accept(State);
 
-handle_info(_Info, State) ->
-    logger:error("acceptor undeal info=~p", [_Info]),
-    {noreply, State}.
+handle_info(_Info , State) ->
+  logger:error("acceptor undeal info=~p" , [_Info]) ,
+  {noreply , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -150,9 +150,9 @@ handle_info(_Info, State) ->
 %% @spec terminate(Reason, State) -> void()
 %% @end
 %%--------------------------------------------------------------------
--spec(terminate(Reason :: (normal | shutdown | {shutdown, term()} | term()),
-    State :: #state{}) -> term()).
-terminate(_Reason, _State) ->
+-spec(terminate(Reason :: (normal | shutdown | {shutdown , term()} | term()) ,
+                State :: #state{}) -> term()).
+terminate(_Reason , _State) ->
   ok.
 
 %%--------------------------------------------------------------------
@@ -163,60 +163,60 @@ terminate(_Reason, _State) ->
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @end
 %%--------------------------------------------------------------------
--spec(code_change(OldVsn :: term() | {down, term()}, State :: #state{},
-    Extra :: term()) ->
-  {ok, NewState :: #state{}} | {error, Reason :: term()}).
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+-spec(code_change(OldVsn :: term() | {down , term()} , State :: #state{} ,
+                  Extra :: term()) ->
+                   {ok , NewState :: #state{}} | {error , Reason :: term()}).
+code_change(_OldVsn , State , _Extra) ->
+  {ok , State}.
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
 
-accept(State = #state{listen_socket=LSock}) ->
-  case catch prim_inet:async_accept(LSock, -1) of
-    {ok, Ref} ->
-      {noreply, State#state{ref=Ref}};
+accept(State = #state{listen_socket = LSock}) ->
+  case catch prim_inet:async_accept(LSock , -1) of
+    {ok , Ref} ->
+      {noreply , State#state{ref = Ref}};
     Error ->
-      logger:error("async_accept error:~p, LSock=~p", [Error, LSock]),
-      self() ! {start_accept_now},
-      {noreply, State}
+      logger:error("async_accept error:~p, LSock=~p" , [Error , LSock]) ,
+      self() ! {start_accept_now} ,
+      {noreply , State}
   end.
 
-accept_one(LSock, Sock) ->
+accept_one(LSock , Sock) ->
   try
-    {ok, Mod} = inet_db:lookup_socket(LSock),
-    inet_db:register_socket(Sock, Mod),
+    {ok , Mod} = inet_db:lookup_socket(LSock) ,
+    inet_db:register_socket(Sock , Mod) ,
     %% report
-    {ok, {Address, Port}} = inet:sockname(Sock),
-    {ok, {PeerAddress, PeerPort}} = inet:peername(Sock),
+    {ok , {Address , Port}} = inet:sockname(Sock) ,
+    {ok , {PeerAddress , PeerPort}} = inet:peername(Sock) ,
 
-    logger:info("accept new sock=~p,~p:~p | ~p:~p", [Sock, utils:ip_to_str(Address), Port, utils:ip_to_str(PeerAddress), PeerPort]),
+    logger:info("accept new sock=~p,~p:~p | ~p:~p" , [Sock , utils:ip_to_str(Address) , Port , utils:ip_to_str(PeerAddress) , PeerPort]) ,
 
     spawn_socket_controller(Sock)
   catch Error:Reason ->
-    logger:error("accept_one error=~p:~p", [Error,Reason]),
+    logger:error("accept_one error=~p:~p" , [Error , Reason]) ,
     gen_tcp:close(Sock)
   end.
 
 
 spawn_socket_controller(ClientSock) ->
   try
-  logger:info("sock_controller sock=~p ...", [ClientSock]),
-  case supervisor:start_child(erlS_session_sup, [ClientSock]) of
-      {ok, SPid} ->
-        inet:setopts(ClientSock, ?TCP_C_OPTS),
-        case catch gen_tcp:controlling_process(ClientSock, SPid) of
-          MSG -> logger:info("controlling_process sock=~p, pid=~p, res=~p ", [ClientSock,SPid,MSG])
-        end,
+    logger:info("sock_controller sock=~p ..." , [ClientSock]) ,
+    case supervisor:start_child(erlS_session_sup , [ClientSock]) of
+      {ok , SPid} ->
+        inet:setopts(ClientSock , ?TCP_C_OPTS) ,
+        case catch gen_tcp:controlling_process(ClientSock , SPid) of
+          MSG -> logger:info("controlling_process sock=~p, pid=~p, res=~p " , [ClientSock , SPid , MSG])
+        end ,
         SPid ! {start_recv_now};
-      {error, closed} -> %% 这种无聊的人 尝试来连我们的，就不管啦
+      {error , closed} -> %% 这种无聊的人 尝试来连我们的，就不管啦
         pass;
-      Other -> logger:error("socket_controller sock=~p, error=~p ", [ClientSock,Other])
+      Other -> logger:error("socket_controller sock=~p, error=~p " , [ClientSock , Other])
     end
   catch
-     _ : _  -> ok
-  end .
+    _ : _ -> ok
+  end.
 
 
 %%  case gen_tcp:recv(ClientSock, 500, 30000) of

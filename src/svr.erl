@@ -9,8 +9,8 @@
 -module(svr).
 -author("Administrator").
 
--export([start/0,
-  stop/0]).
+-export([start/0 ,
+         stop/0]).
 
 %%
 %% API Functions
@@ -21,22 +21,22 @@ start() ->
     ok ->
       ok;
     Msg ->
-      {failur, Msg}
+      {failur , Msg}
   end.
 
 %% 关闭应用
 stop() ->
   try
-    logger:info("svr:stop....."),
-    timer:sleep(20000),     %%等待2000毫秒
+    logger:info("svr:stop.....") ,
+    timer:sleep(20000) ,     %%等待2000毫秒
     case application:stop(erlS) of
       ok ->
         logger:info("svr stopped");
       Msg ->
-        logger:error("svr stop not ok,msg=~p",[Msg])
+        logger:error("svr stop not ok,msg=~p" , [Msg])
     end
   catch
     _:_Why ->
-      logger:error("svr:stop exception, reason=~p,bt=~p",[_Why, erlang:get_stacktrace()])
-  end,
+      logger:error("svr:stop exception, reason=~p,bt=~p" , [_Why , erlang:get_stacktrace()])
+  end ,
   erlang:halt().

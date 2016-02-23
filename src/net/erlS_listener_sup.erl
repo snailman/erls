@@ -12,12 +12,12 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0, start_link/1]).
+-export([start_link/0 , start_link/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 -include("common.hrl").
 
 %%%===================================================================
@@ -31,11 +31,11 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , []).
 start_link(Param) ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, Param).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , Param).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -52,34 +52,34 @@ start_link(Param) ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, {SupFlags :: {RestartStrategy :: supervisor:strategy(),
-    MaxR :: non_neg_integer(), MaxT :: non_neg_integer()},
-    [ChildSpec :: supervisor:child_spec()]
+  {ok , {SupFlags :: {RestartStrategy :: supervisor:strategy() ,
+                      MaxR :: non_neg_integer() , MaxT :: non_neg_integer()} ,
+         [ChildSpec :: supervisor:child_spec()]
   }} |
   ignore |
-  {error, Reason :: term()}).
+  {error , Reason :: term()}).
 init(Port) ->
 %%  ?DEV("will start listen at ~p", [Port]),
   AcceptorSup = {
-    erlS_acceptor_sup,
-    {erlS_acceptor_sup, start_link, []},
+    erlS_acceptor_sup ,
+    {erlS_acceptor_sup , start_link , []} ,
     % transient, infinity, supervisor,[erlS_acceptor_sup]
-    temporary, infinity, supervisor,[erlS_acceptor_sup]
-  },
+    temporary , infinity , supervisor , [erlS_acceptor_sup]
+  } ,
 
   Listener = {
-    erlS_listener,
-    {erlS_listener, start_link, [Port]},
+    erlS_listener ,
+    {erlS_listener , start_link , [Port]} ,
     % transient,100,worker,[erlS_listener]
-    temporary, 16#ffffffff, worker, [erlS_listener]
-  },
+    temporary , 16#ffffffff , worker , [erlS_listener]
+  } ,
 
 
-  {ok,
-    {
-      {one_for_all, 10, 10},
-      [AcceptorSup, Listener]
-    }
+  {ok ,
+   {
+     {one_for_all , 10 , 10} ,
+     [AcceptorSup , Listener]
+   }
   }.
 
 %%%===================================================================

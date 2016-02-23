@@ -17,7 +17,7 @@
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
 -include("common.hrl").
 
@@ -32,9 +32,9 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local , ?SERVER} , ?MODULE , []).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -51,67 +51,67 @@ start_link() ->
 %% @end
 %%--------------------------------------------------------------------
 -spec(init(Args :: term()) ->
-  {ok, {SupFlags :: {RestartStrategy :: supervisor:strategy(),
-    MaxR :: non_neg_integer(), MaxT :: non_neg_integer()},
-    [ChildSpec :: supervisor:child_spec()]
+  {ok , {SupFlags :: {RestartStrategy :: supervisor:strategy() ,
+                      MaxR :: non_neg_integer() , MaxT :: non_neg_integer()} ,
+         [ChildSpec :: supervisor:child_spec()]
   }} |
   ignore |
-  {error, Reason :: term()}).
+  {error , Reason :: term()}).
 init([]) ->
 
-  init_base(),
+  init_base() ,
 
 
   TimeServer = {
-    common_time_server,
-    {common_time_server, start_link, []},
-    transient, brutal_kill, worker,
+    common_time_server ,
+    {common_time_server , start_link , []} ,
+    transient , brutal_kill , worker ,
     [common_time_server]
-  },
+  } ,
 
   ErlSvrCs = {
-    erlS_svr_sup,
-     {erlS_svr_sup, start_link, [{10,15001}]},
-     permanent,
-     infinity,
-     supervisor,
-     [erlS_svr_sup]
-   },
+    erlS_svr_sup ,
+    {erlS_svr_sup , start_link , [{10 , 15001}]} ,
+    permanent ,
+    infinity ,
+    supervisor ,
+    [erlS_svr_sup]
+  } ,
 
   VmMemMonitor = {
-    vm_memory_monitor,
-    {vm_memory_monitor, start_link,[1]},
-    permanent,
-    infinity,
-    worker,
+    vm_memory_monitor ,
+    {vm_memory_monitor , start_link , [1]} ,
+    permanent ,
+    infinity ,
+    worker ,
     [erlS_svr_sup]
-  },
+  } ,
 
-  {ok,
-    {
-      {one_for_one, 1, 10},
-     [TimeServer, ErlSvrCs,VmMemMonitor]
-    }
+  {ok ,
+   {
+     {one_for_one , 1 , 10} ,
+     [TimeServer , ErlSvrCs , VmMemMonitor]
+   }
   }.
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-init_base( ) ->
-  logger:start(),
-  log4erl:info("start root supervisor..."),
+init_base() ->
+  logger:start() ,
+  log4erl:info("start root supervisor...") ,
 
-  log4erl:info("start sasl..."),
-  application:start(sasl),
-  log4erl:info("start sasl ok"),
+  log4erl:info("start sasl...") ,
+  application:start(sasl) ,
+  log4erl:info("start sasl ok") ,
 
-  log4erl:info("start os_mon..."),
-  application:start(os_mon),
-  log4erl:info("start os_mon ok"),
+  log4erl:info("start os_mon...") ,
+  application:start(os_mon) ,
+  log4erl:info("start os_mon ok") ,
 
-  log4erl:info("start recon..."),
-  application:start(recon),
-  log4erl:info("start recon ok"),
+  log4erl:info("start recon...") ,
+  application:start(recon) ,
+  log4erl:info("start recon ok") ,
 
 %%  log4erl:info("start common_time_server..."),
 %%  common_time_server:start(self()),

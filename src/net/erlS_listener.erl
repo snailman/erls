@@ -12,19 +12,19 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0,start_link/1]).
+-export([start_link/0 , start_link/1]).
 
 %% gen_server callbacks
--export([init/1,
-  handle_call/3,
-  handle_cast/2,
-  handle_info/2,
-  terminate/2,
-  code_change/3]).
+-export([init/1 ,
+         handle_call/3 ,
+         handle_cast/2 ,
+         handle_info/2 ,
+         terminate/2 ,
+         code_change/3]).
 
--define(SERVER, ?MODULE).
+-define(SERVER , ?MODULE).
 
--record(state, {listenSock}).
+-record(state , {listenSock}).
 
 -include("common.hrl").
 
@@ -39,13 +39,13 @@
 %% @end
 %%--------------------------------------------------------------------
 -spec(start_link() ->
-  {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
+  {ok , Pid :: pid()} | ignore | {error , Reason :: term()}).
 start_link() ->
-  gen_server:start_link(?MODULE, [], []).
+  gen_server:start_link(?MODULE , [] , []).
 
 start_link(Param) ->
-  logger:info("erlS_listener:start_link(~p)", [Param]),
-  gen_server:start_link(?MODULE, Param, []).
+  logger:info("erlS_listener:start_link(~p)" , [Param]) ,
+  gen_server:start_link(?MODULE , Param , []).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -64,22 +64,22 @@ start_link(Param) ->
 %%--------------------------------------------------------------------
 
 -spec(init(Args :: term()) ->
-  {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term()} | ignore).
-init({AcceptorNum,Port}) ->
-  process_flag(trap_exit, true),
-  logger:info("listener at port:~p ... ", [Port]),
-  case gen_tcp:listen(Port, ?TCP_L_OPTS ) of
-    {ok, LSock} ->
-      {ok, {LIPAddress, LPort}} = inet:sockname(LSock),
-      logger:info("listener at ~p:~p,sock(~p) ok.", [utils:ip_to_str(LIPAddress), LPort, LSock]),
+  {ok , State :: #state{}} | {ok , State :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term()} | ignore).
+init({AcceptorNum , Port}) ->
+  process_flag(trap_exit , true) ,
+  logger:info("listener at port:~p ... " , [Port]) ,
+  case gen_tcp:listen(Port , ?TCP_L_OPTS) of
+    {ok , LSock} ->
+      {ok , {LIPAddress , LPort}} = inet:sockname(LSock) ,
+      logger:info("listener at ~p:~p,sock(~p) ok." , [utils:ip_to_str(LIPAddress) , LPort , LSock]) ,
 
-      start_n_acceptor(AcceptorNum, LSock),
+      start_n_acceptor(AcceptorNum , LSock) ,
 
-      {ok, #state{listenSock = LSock}};
-    {error, Reason} ->
-      logger:fatal("listener init failed,error=~p", [Reason]),
-      {stop, {cannot_listen, Port, Reason}}
+      {ok , #state{listenSock = LSock}};
+    {error , Reason} ->
+      logger:fatal("listener init failed,error=~p" , [Reason]) ,
+      {stop , {cannot_listen , Port , Reason}}
   end.
 
 %%--------------------------------------------------------------------
@@ -89,16 +89,16 @@ init({AcceptorNum,Port}) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_call(Request :: term(), From :: {pid(), Tag :: term()},
-    State :: #state{}) ->
-  {reply, Reply :: term(), NewState :: #state{}} |
-  {reply, Reply :: term(), NewState :: #state{}, timeout() | hibernate} |
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), Reply :: term(), NewState :: #state{}} |
-  {stop, Reason :: term(), NewState :: #state{}}).
-handle_call(_Request, _From, State) ->
-  {reply, ok, State}.
+-spec(handle_call(Request :: term() , From :: {pid() , Tag :: term()} ,
+                  State :: #state{}) ->
+                   {reply , Reply :: term() , NewState :: #state{}} |
+                   {reply , Reply :: term() , NewState :: #state{} , timeout() | hibernate} |
+                   {noreply , NewState :: #state{}} |
+                   {noreply , NewState :: #state{} , timeout() | hibernate} |
+                   {stop , Reason :: term() , Reply :: term() , NewState :: #state{}} |
+                   {stop , Reason :: term() , NewState :: #state{}}).
+handle_call(_Request , _From , State) ->
+  {reply , ok , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -107,12 +107,12 @@ handle_call(_Request, _From, State) ->
 %%
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_cast(Request :: term(), State :: #state{}) ->
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), NewState :: #state{}}).
-handle_cast(_Request, State) ->
-  {noreply, State}.
+-spec(handle_cast(Request :: term() , State :: #state{}) ->
+  {noreply , NewState :: #state{}} |
+  {noreply , NewState :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term() , NewState :: #state{}}).
+handle_cast(_Request , State) ->
+  {noreply , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -124,12 +124,12 @@ handle_cast(_Request, State) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
--spec(handle_info(Info :: timeout() | term(), State :: #state{}) ->
-  {noreply, NewState :: #state{}} |
-  {noreply, NewState :: #state{}, timeout() | hibernate} |
-  {stop, Reason :: term(), NewState :: #state{}}).
-handle_info(_Info, State) ->
-  {noreply, State}.
+-spec(handle_info(Info :: timeout() | term() , State :: #state{}) ->
+  {noreply , NewState :: #state{}} |
+  {noreply , NewState :: #state{} , timeout() | hibernate} |
+  {stop , Reason :: term() , NewState :: #state{}}).
+handle_info(_Info , State) ->
+  {noreply , State}.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -142,9 +142,9 @@ handle_info(_Info, State) ->
 %% @spec terminate(Reason, State) -> void()
 %% @end
 %%--------------------------------------------------------------------
--spec(terminate(Reason :: (normal | shutdown | {shutdown, term()} | term()),
-    State :: #state{}) -> term()).
-terminate(_Reason, _State) ->
+-spec(terminate(Reason :: (normal | shutdown | {shutdown , term()} | term()) ,
+                State :: #state{}) -> term()).
+terminate(_Reason , _State) ->
   ok.
 
 %%--------------------------------------------------------------------
@@ -155,26 +155,26 @@ terminate(_Reason, _State) ->
 %% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @end
 %%--------------------------------------------------------------------
--spec(code_change(OldVsn :: term() | {down, term()}, State :: #state{},
-    Extra :: term()) ->
-  {ok, NewState :: #state{}} | {error, Reason :: term()}).
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
+-spec(code_change(OldVsn :: term() | {down , term()} , State :: #state{} ,
+                  Extra :: term()) ->
+                   {ok , NewState :: #state{}} | {error , Reason :: term()}).
+code_change(_OldVsn , State , _Extra) ->
+  {ok , State}.
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-start_n_acceptor(N,LSock) ->
-  logger:info("start ~p acceptors ... ", [N]),
+start_n_acceptor(N , LSock) ->
+  logger:info("start ~p acceptors ... " , [N]) ,
 
   lists:foreach(
     fun(_) ->
-      {ok, APid} = supervisor:start_child(erlS_acceptor_sup,[LSock]), %erlS_acceptor_sup:start_child([LSock],
+      {ok , APid} = supervisor:start_child(erlS_acceptor_sup , [LSock]) , %erlS_acceptor_sup:start_child([LSock],
       APid ! {start_accept_now}
-    end,
+    end ,
 
-    lists:duplicate(N, dummy)
-  ),
+    lists:duplicate(N , dummy)
+  ) ,
 
-  logger:info("start ~p acceptors ok.", [N]).
+  logger:info("start ~p acceptors ok." , [N]).
 
