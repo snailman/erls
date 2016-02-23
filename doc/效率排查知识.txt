@@ -1,11 +1,11 @@
-+ erlang´ÓR15ÒÔºóÌá¹©ÁËµ÷¶ÈÆ÷µÄÀûÓÃÂÊµ÷²é£¬Õâ¸öº¯Êı¾ÍÊÇ£ºerlang:statistics(scheduler_wall_time)
-¾ßÌå²Î¿¼ÎÄµµ¹ØÓÚerlang:statistics(scheduler_wall_time)
++ erlangä»R15ä»¥åæä¾›äº†è°ƒåº¦å™¨çš„åˆ©ç”¨ç‡è°ƒæŸ¥ï¼Œè¿™ä¸ªå‡½æ•°å°±æ˜¯ï¼šerlang:statistics(scheduler_wall_time)
+å…·ä½“å‚è€ƒæ–‡æ¡£å…³äºerlang:statistics(scheduler_wall_time)
 
-ÆäÖĞÒª×¢ÒâµÄÊÇ¡±scheduler_wall_time is by default disabled. 
-Use erlang:system_flag(scheduler_wall_time, true) to enable it.¡±¡£Ô­ÒòÊÇÔËĞĞÆÚĞèÒªÈ¥×öÍ³¼Æ¹¤×÷»áÓ°ÏìĞÔÄÜ¡£¶øÇÒº¯Êı·µ»ØµÄÃ¿¸öµ÷¶ÈÆ÷µÄÊ¹ÓÃÇé¿öË³ĞòÊÇÂÒµÄ£¬ĞèÒªÅÅĞòÏÂ¡£
-percept2Ìá¹©ÁË¸öpercept2_samplingÀ´°ïÎÒÃÇ¿ÉÊÓ»¯Õâ¸öÀûÓÃÂÊ, ÑİÊ¾ÈçÏÂ£º
+å…¶ä¸­è¦æ³¨æ„çš„æ˜¯â€scheduler_wall_time is by default disabled. 
+Use erlang:system_flag(scheduler_wall_time, true) to enable it.â€ã€‚åŸå› æ˜¯è¿è¡ŒæœŸéœ€è¦å»åšç»Ÿè®¡å·¥ä½œä¼šå½±å“æ€§èƒ½ã€‚è€Œä¸”å‡½æ•°è¿”å›çš„æ¯ä¸ªè°ƒåº¦å™¨çš„ä½¿ç”¨æƒ…å†µé¡ºåºæ˜¯ä¹±çš„ï¼Œéœ€è¦æ’åºä¸‹ã€‚
+percept2æä¾›äº†ä¸ªpercept2_samplingæ¥å¸®æˆ‘ä»¬å¯è§†åŒ–è¿™ä¸ªåˆ©ç”¨ç‡, æ¼”ç¤ºå¦‚ä¸‹ï¼š
 
-ÎÒÃÇÆô¶¯percept2_samplingÊÕ¼¯ÏµÍ³Ò»·ÖÖÓµÄÊı¾İ£¬È»ºóÓÃweb½çÃæ²é¿´£º
+æˆ‘ä»¬å¯åŠ¨percept2_samplingæ”¶é›†ç³»ç»Ÿä¸€åˆ†é’Ÿçš„æ•°æ®ï¼Œç„¶åç”¨webç•Œé¢æŸ¥çœ‹ï¼š
 $ erl -pa percept2/ebin
 Erlang R15B03 (erts-5.9.3.1) 1 [64-bit] [smp:16:16] [async-threads:0] [hipe] [kernel-poll:false]
  
@@ -18,9 +18,9 @@ Eshell V5.9.3.1  (abort with ^G)
 
 +http://www.cnblogs.com/lulu/p/3978378.html
 
-Í¨¹ıÎ¢²©Ë½ĞÅ£¬Çë½ÌÁËÏÂÖ£Ë¼Ñş£¬ÍÆ¼öVTune·ÖÎö£¬ÍÆ²âÊÇ´óÁ¿½ø³ÌÊ±µ÷¶ÈÆ÷ÏûºÄ¹ı´ó¡£
-Í¨¹ıIntel ¹Ù·½ÍøÕ¾£¬ÌîĞ´×¢²áĞÅÏ¢£¬»áÁ¢¼´»Ø¸´ÓÊ¼şÏÂÔØµØÖ·£¬²¢¸ø30ÌìÊÔÓÃÆÚ¡£
-ËÙ¶ÈºÜÂı£¬½¨Òé¹Ò×ÅVPNÏÂÔØ£»VTune µÄlinux°æ±¾ÃüÁîĞĞÄ£Ê½Ê¹ÓÃºÜ¼òµ¥£º
+é€šè¿‡å¾®åšç§ä¿¡ï¼Œè¯·æ•™äº†ä¸‹éƒ‘æ€ç‘¶ï¼Œæ¨èVTuneåˆ†æï¼Œæ¨æµ‹æ˜¯å¤§é‡è¿›ç¨‹æ—¶è°ƒåº¦å™¨æ¶ˆè€—è¿‡å¤§ã€‚
+é€šè¿‡Intel å®˜æ–¹ç½‘ç«™ï¼Œå¡«å†™æ³¨å†Œä¿¡æ¯ï¼Œä¼šç«‹å³å›å¤é‚®ä»¶ä¸‹è½½åœ°å€ï¼Œå¹¶ç»™30å¤©è¯•ç”¨æœŸã€‚
+é€Ÿåº¦å¾ˆæ…¢ï¼Œå»ºè®®æŒ‚ç€VPNä¸‹è½½ï¼›VTune çš„linuxç‰ˆæœ¬å‘½ä»¤è¡Œæ¨¡å¼ä½¿ç”¨å¾ˆç®€å•ï¼š
 
 tar -zxf vtune_amplifier_xe_2015.tar.gz
 
@@ -37,9 +37,9 @@ amplxe-cl -collect lightweight-hotspots -run-pass-thru=--no-altstack -target-pid
 amplxe-cl -report hotspots
 
 
- ¿ÉÖ±½ÓÏßÉÏÖ´ĞĞ£¬²»Ó°Ïì·şÎñÕı³£ÔËĞĞ£¬µÃµ½ÈçÏÂ½á¹û£º
+ å¯ç›´æ¥çº¿ä¸Šæ‰§è¡Œï¼Œä¸å½±å“æœåŠ¡æ­£å¸¸è¿è¡Œï¼Œå¾—åˆ°å¦‚ä¸‹ç»“æœï¼š
 
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
 Summary
 -------
 Elapsed Time:       19.345
@@ -68,22 +68,22 @@ raw_local_irq_enable                         vmlinux                     0.780
 
 
 +++++++++++++++++++
- ÏµÍ³¼¶±ğperf top, dstat -tam, vtune ¶¼ÄÜºÜºÃ·ÖÎöbeam Æ¿¾±£¬±¾ÎÄÖ÷Òªerlang ¼¶±ğÅÅ²é£º
+ ç³»ç»Ÿçº§åˆ«perf top, dstat -tam, vtune éƒ½èƒ½å¾ˆå¥½åˆ†æbeam ç“¶é¢ˆï¼Œæœ¬æ–‡ä¸»è¦erlang çº§åˆ«æ’æŸ¥ï¼š
 
-1. ·´±àÒë
+1. åç¼–è¯‘
 
-   È·ÈÏÏßÉÏÔËĞĞ´úÂëÊÇ·ñÕıÈ·£¬reltoolsÃ»ÕÆÎÕºÃ£¬Éı¼¶Å¼¶û³öÏÖÎÊÌâ
+   ç¡®è®¤çº¿ä¸Šè¿è¡Œä»£ç æ˜¯å¦æ­£ç¡®ï¼Œreltoolsæ²¡æŒæ¡å¥½ï¼Œå‡çº§å¶å°”å‡ºç°é—®é¢˜
 
 decompile(Mod) ->
     {ok,{_,[{abstract_code,{_,AC}}]}} = beam_lib:chunks(code:which(Mod), [abstract_code]),
     io:format("~s~n", [erl_prettypr:format(erl_syntax:form_list(AC))]).
  
 
-2. ½ø³ÌÕ»
+2. è¿›ç¨‹æ ˆ
 
-    ÀàËÆÓÚjstack£¬·¢ÏÖ´óÁ¿½ø³Ì¹ÒÆğ£¬½ø³ÌÊı¹ı¸ß£¬ÔËĞĞÂı£¬hang×¡µÈÎÊÌâÓÃµ½
+    ç±»ä¼¼äºjstackï¼Œå‘ç°å¤§é‡è¿›ç¨‹æŒ‚èµ·ï¼Œè¿›ç¨‹æ•°è¿‡é«˜ï¼Œè¿è¡Œæ…¢ï¼Œhangä½ç­‰é—®é¢˜ç”¨åˆ°
 
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
 pstack(Reg) when is_atom(Reg) ->
     case whereis(Reg) of
         undefined -> undefined;
@@ -91,60 +91,60 @@ pstack(Reg) when is_atom(Reg) ->
     end;
 pstack(Pid) ->
     io:format("~s~n", [element(2, process_info(Pid, backtrace))]).
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
 3. etop
 
-  ·ÖÎöÄÚ´æ¡¢cpuÕ¼ÓÃ½ø³Ì£¬¼´Ê¹ÊıÊ®w½ø³Ìnode Ò²ÄÜÕı³£Ê¹ÓÃ
+  åˆ†æå†…å­˜ã€cpuå ç”¨è¿›ç¨‹ï¼Œå³ä½¿æ•°åwè¿›ç¨‹node ä¹Ÿèƒ½æ­£å¸¸ä½¿ç”¨
 
-¸´ÖÆ´úÂë
-%½ø³ÌCPUÕ¼ÓÃÅÅÃû
+å¤åˆ¶ä»£ç 
+%è¿›ç¨‹CPUå ç”¨æ’å
 etop() ->
     spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, reductions}]) end).
 
-%½ø³ÌMemÕ¼ÓÃÅÅÃû
+%è¿›ç¨‹Memå ç”¨æ’å
 etop_mem() ->
     spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, memory}]) end).
 
-%Í£Ö¹etop
+%åœæ­¢etop
 etop_stop() ->
     etop:stop().
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
 4. gc all
 
-   ½ø³ÌÄÚ´æ¹ı¸ßÊ±£¬À´Ò»·¢£¬¿´¿´ÊÇÄÚ´æĞ¹Â¶»¹ÊÇgc²»¹ıÀ´
+   è¿›ç¨‹å†…å­˜è¿‡é«˜æ—¶ï¼Œæ¥ä¸€å‘ï¼Œçœ‹çœ‹æ˜¯å†…å­˜æ³„éœ²è¿˜æ˜¯gcä¸è¿‡æ¥
 
-% ¶ÔËùÓĞprocess×ögc
+% å¯¹æ‰€æœ‰processåšgc
 gc_all() ->
     [erlang:garbage_collect(Pid) || Pid <- processes()].
  
 
 5.  fprof
 
-¸´ÖÆ´úÂë
-% ¶ÔMFA Ö´ĞĞ·ÖÎö£¬»áÑÏÖØ¼õ»ºÔËĞĞ£¬½¨ÒéÖ»¶ÔĞ¡Á¿ÒµÎñÖ´ĞĞ
-% ½á¹û:
-% fprof ½á¹û±È½ÏÏêÏ¸£¬ÄÜ¹»Êä³öÈÈµãµ÷ÓÃÂ·¾¶
+å¤åˆ¶ä»£ç 
+% å¯¹MFA æ‰§è¡Œåˆ†æï¼Œä¼šä¸¥é‡å‡ç¼“è¿è¡Œï¼Œå»ºè®®åªå¯¹å°é‡ä¸šåŠ¡æ‰§è¡Œ
+% ç»“æœ:
+% fprof ç»“æœæ¯”è¾ƒè¯¦ç»†ï¼Œèƒ½å¤Ÿè¾“å‡ºçƒ­ç‚¹è°ƒç”¨è·¯å¾„
 fprof(M, F, A) ->
     fprof:start(),
     fprof:apply(M, F, A),
     fprof:profile(),
     fprof:analyse(),
     fprof:stop().
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
 6. eprof
 
-¸´ÖÆ´úÂë
-% ¶ÔÕû¸ö½ÚµãÄÚËùÓĞ½ø³ÌÖ´ĞĞeprof, eprof ¶ÔÏßÉÏÒµÎñÓĞÒ»¶¨Ó°Ïì,É÷ÓÃ!
-% ½¨ÒéTimeoutSec<10s£¬ÇÒ½ø³ÌÊı< 1000£¬·ñÔò¿ÉÄÜµ¼ÖÂ½Úµãcrash
-% ½á¹û:
-% Êä³öÃ¿¸ö·½·¨Êµ¼ÊÖ´ĞĞÊ±¼ä£¨²»»áÀÛ¼Æ·½·¨ÄÚÆäËûmodµ÷ÓÃÖ´ĞĞÊ±¼ä£©
-% Ö»ÄÜµÃµ½mod - Fun Ö´ĞĞ´ÎÊı Ö´ĞĞºÄÊ±
+å¤åˆ¶ä»£ç 
+% å¯¹æ•´ä¸ªèŠ‚ç‚¹å†…æ‰€æœ‰è¿›ç¨‹æ‰§è¡Œeprof, eprof å¯¹çº¿ä¸Šä¸šåŠ¡æœ‰ä¸€å®šå½±å“,æ…ç”¨!
+% å»ºè®®TimeoutSec<10sï¼Œä¸”è¿›ç¨‹æ•°< 1000ï¼Œå¦åˆ™å¯èƒ½å¯¼è‡´èŠ‚ç‚¹crash
+% ç»“æœ:
+% è¾“å‡ºæ¯ä¸ªæ–¹æ³•å®é™…æ‰§è¡Œæ—¶é—´ï¼ˆä¸ä¼šç´¯è®¡æ–¹æ³•å†…å…¶ä»–modè°ƒç”¨æ‰§è¡Œæ—¶é—´ï¼‰
+% åªèƒ½å¾—åˆ°mod - Fun æ‰§è¡Œæ¬¡æ•° æ‰§è¡Œè€—æ—¶
 eprof_all(TimeoutSec) ->
     eprof(processes() -- [whereis(eprof)], TimeoutSec).
 
@@ -155,13 +155,13 @@ eprof(Pids, TimeoutSec) ->
     eprof:stop_profiling(),
     eprof:analyze(total),
     eprof:stop().
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
 7. scheduler usage
 
-¸´ÖÆ´úÂë
-% Í³¼ÆÏÂ1sÃ¿¸öµ÷¶ÈÆ÷CPUµÄÊµ¼ÊÀûÓÃÂÊ(ÒòÎªÓĞspin wait¡¢µ÷¶È¹¤×÷, ¿ÉÄÜusage ±ÈtopÏÔÊ¾µÍºÜ¶à)
+å¤åˆ¶ä»£ç 
+% ç»Ÿè®¡ä¸‹1sæ¯ä¸ªè°ƒåº¦å™¨CPUçš„å®é™…åˆ©ç”¨ç‡(å› ä¸ºæœ‰spin waitã€è°ƒåº¦å·¥ä½œ, å¯èƒ½usage æ¯”topæ˜¾ç¤ºä½å¾ˆå¤š)
 scheduler_usage() ->
     scheduler_usage(1000).
 
@@ -177,13 +177,13 @@ scheduler_usage(RunMs) ->
                     {Ai + (A1 - A0), Ti + (T1 - T0)} end, {0, 0}, lists:zip(Ts0, Ts1)),
     Total = A/T,
     io:format("~p~n", [[{total, Total} | Cores]]).
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
-8.  ½ø³Ìµ÷¶È
+8.  è¿›ç¨‹è°ƒåº¦
 
-¸´ÖÆ´úÂë
-% Í³¼ÆÏÂ1sÄÚµ÷¶È½ø³ÌÊıÁ¿(º¬Òå£ºµÚÒ»¸öÊı×ÖÖ´ĞĞ½ø³ÌÊıÁ¿£¬µÚ¶ş¸öÊı×ÖÇ¨ÒÆ½ø³ÌÊıÁ¿)
+å¤åˆ¶ä»£ç 
+% ç»Ÿè®¡ä¸‹1så†…è°ƒåº¦è¿›ç¨‹æ•°é‡(å«ä¹‰ï¼šç¬¬ä¸€ä¸ªæ•°å­—æ‰§è¡Œè¿›ç¨‹æ•°é‡ï¼Œç¬¬äºŒä¸ªæ•°å­—è¿ç§»è¿›ç¨‹æ•°é‡)
 scheduler_stat() ->
     scheduler_stat(1000).
 
@@ -195,38 +195,38 @@ scheduler_stat(RunMs) ->
     erlang:system_flag(scheduling_statistics, disable),
     lists:map(fun({{Key, In0, Out0}, {Key, In1, Out1}}) ->
                 {Key, In1 - In0, Out1 - Out0} end, lists:zip(Ts0, Ts1)).
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
-9. trace ÈÕÖ¾
+9. trace æ—¥å¿—
 
-¡¡¡¡»á°Ñmod Ã¿´Îµ÷ÓÃÏêÏ¸MFA log ÏÂÀ´£¬args Ì«´ó¾Í²»ºÃ¿´ÁË
+ã€€ã€€ä¼šæŠŠmod æ¯æ¬¡è°ƒç”¨è¯¦ç»†MFA log ä¸‹æ¥ï¼Œargs å¤ªå¤§å°±ä¸å¥½çœ‹äº†
 
-¸´ÖÆ´úÂë
-%trace Mod ËùÓĞ·½·¨µÄµ÷ÓÃ
+å¤åˆ¶ä»£ç 
+%trace Mod æ‰€æœ‰æ–¹æ³•çš„è°ƒç”¨
 trace(Mod) ->
     dbg:tracer(),
     dbg:tpl(Mod, '_', []),
     dbg:p(all, c).
 
-%trace NodeÉÏÖ¸¶¨ Mod ËùÓĞ·½·¨µÄµ÷ÓÃ, ½á¹û½«Êä³öµ½±¾µØshell
+%trace Nodeä¸ŠæŒ‡å®š Mod æ‰€æœ‰æ–¹æ³•çš„è°ƒç”¨, ç»“æœå°†è¾“å‡ºåˆ°æœ¬åœ°shell
 trace(Node, Mod) ->
     dbg:tracer(),
     dbg:n(Node),
     dbg:tpl(Mod, '_', []),
     dbg:p(all, c).
 
-%Í£Ö¹trace
+%åœæ­¢trace
 trace_stop() ->
     dbg:stop_clear().
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
  
 
-10. ÄÚ´æ¸ßOOM ÅÅ²é¹¤¾ß
+10. å†…å­˜é«˜OOM æ’æŸ¥å·¥å…·
 
-  etop ÎŞ·¨Ó¦¶Ô10w+ ½ø³Ì½Úµã, ÏÂÃæ´úÂë¾ÍÃ»ÎÊÌâÁË£»ÕÒµ½¿ÉÒÉprocºóÍ¨¹ıpstack¡¢message_queu_len ÅÅ²éÔ­Òò
+  etop æ— æ³•åº”å¯¹10w+ è¿›ç¨‹èŠ‚ç‚¹, ä¸‹é¢ä»£ç å°±æ²¡é—®é¢˜äº†ï¼›æ‰¾åˆ°å¯ç–‘procåé€šè¿‡pstackã€message_queu_len æ’æŸ¥åŸå› 
 
-¸´ÖÆ´úÂë
+å¤åˆ¶ä»£ç 
   proc_mem_all(SizeLimitKb) ->
       Procs = [{undefined, Pid} || Pid<- erlang:processes()],
       proc_mem(Procs, SizeLimitKb).

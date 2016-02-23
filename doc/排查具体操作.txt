@@ -1,15 +1,15 @@
 ++++++++++++++++++
-ÄÚ´æ
+å†…å­˜
 
-1. ²é¿´½ÚµãµÄÄÚ´æÆ¿¾±ËùÔÚµØ·½ erlang:memory(). / io:format("~s~n", [binary_to_list(erlang:system_info(info))]).
-2. ²é¿´Õ¼ÓÃÄÚ´æ×î¸ßµÄ½ø³Ì spawn(fun()-> etop:start([{output, text}, {interval, 1}, {lines, 20}, {sort, memory}]) end).
-3. ²é¿´Õ¼ÓÃÄÚ´æ×î¸ßµÄ½ø³Ì×´Ì¬ erlang:process_info(pid(0,12571,0)). 
+1. æŸ¥çœ‹èŠ‚ç‚¹çš„å†…å­˜ç“¶é¢ˆæ‰€åœ¨åœ°æ–¹ erlang:memory(). / io:format("~s~n", [binary_to_list(erlang:system_info(info))]).
+2. æŸ¥çœ‹å ç”¨å†…å­˜æœ€é«˜çš„è¿›ç¨‹ spawn(fun()-> etop:start([{output, text}, {interval, 1}, {lines, 20}, {sort, memory}]) end).
+3. æŸ¥çœ‹å ç”¨å†…å­˜æœ€é«˜çš„è¿›ç¨‹çŠ¶æ€ erlang:process_info(pid(0,12571,0)). 
 
-»òÕß etop
+æˆ–è€… etop
 
 
 CPU
-** dstat -tam, vtune ¶¼ÄÜºÜºÃ·ÖÎöbeam Æ¿¾±
-1.erlang:statistics(scheduler_wall_time) »òÕßVTune·ÖÎö/etop
-2.%½ø³ÌCPUÕ¼ÓÃÅÅÃû
+** dstat -tam, vtune éƒ½èƒ½å¾ˆå¥½åˆ†æžbeam ç“¶é¢ˆ
+1.erlang:statistics(scheduler_wall_time) æˆ–è€…VTuneåˆ†æž/etop
+2.%è¿›ç¨‹CPUå ç”¨æŽ’å
 etop() -> spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, reductions}]) end).
