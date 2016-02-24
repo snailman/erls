@@ -1,4 +1,9 @@
 ++++++++++++++++++
+werl -name y@127.0.0.1 -setcookie xxyy -remsh svr@127.0.0.1
+
+erl -name observer@127.0.0.1 -hidden -setcookie erlide -run observer
+
+++++++++++++++++++
 内存
 
 1. 查看节点的内存瓶颈所在地方 erlang:memory(). / io:format("~s~n", [binary_to_list(erlang:system_info(info))]).
