@@ -14,7 +14,7 @@ erl -name observer@127.0.0.1 -hidden -setcookie erlide -run observer
 
 
 CPU
-** dstat -tam, vtune 都能很好分析beam 瓶颈
+** nmon dstat -tam, vtune 都能很好分析beam 瓶颈
 1.erlang:statistics(scheduler_wall_time) 或者VTune分析/etop
 2.%进程CPU占用排名
 etop() -> spawn(fun() -> etop:start([{output, text}, {interval, 10}, {lines, 20}, {sort, reductions}]) end).
