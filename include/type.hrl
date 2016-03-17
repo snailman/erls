@@ -36,6 +36,8 @@
 -type etsTab() :: integer() | atom().
 -type bool01() :: 0 | 1.
 
+
+
 -type uint8() :: 0 .. 255.
 -type uint16() :: 0 .. 65535.
 -type uint32() :: 0 .. 4294967295.
