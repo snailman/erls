@@ -98,6 +98,15 @@ init([]) ->
 %%% Internal functions
 %%%===================================================================
 init_base() ->
+
+
+  List = [{1,999},{2,888},{3,7777}],
+  Fun = fun({Code, Time} = Pair, {AccIn,DelList}) ->
+        Ret = {AccIn,[Code | DelList]},
+        Ret
+    end,
+  {L,DelL} = lists:foldl(Fun, {[],[]}, List),
+
   logger:start() ,
   log4erl:info("start root supervisor...") ,
 

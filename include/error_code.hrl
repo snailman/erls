@@ -9,4 +9,4 @@
 -author("Administrator").
 
 %%--------------------------------
--define(_LANG_PARSE_FORMULA_ERROR, -100001).
+-define(_LANG_PARSE_FORMULA_ERROR , -100001).

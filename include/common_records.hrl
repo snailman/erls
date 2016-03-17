@@ -1,3 +1,1 @@
-
-
--record(ets_time_cache, {type, time}).
+-record(ets_time_cache , {type , time}).
